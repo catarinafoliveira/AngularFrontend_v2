@@ -1,1 +1,23 @@
-<p>login works!</p>
+<div class="right-container d-flex justify-content-end align-items-center">
+    <form (ngSubmit)="login()" class="right-form">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="username" class="form-label">Username:</label>
+            </div>
+            <div class="col-md-8">
+                <input type="text" name="username" id="username" [(ngModel)]="username" required class="form-control" />
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="password" class="form-label">Password:</label>
+            </div>
+            <div class="col-md-8">
+                <input type="password" name="password" id="password" [(ngModel)]="password" required class="form-control" />
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>
