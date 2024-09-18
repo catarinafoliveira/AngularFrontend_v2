@@ -76,7 +76,7 @@
             <div class="col-md-8">
                 <div class="input-group">
                     <input
-                    :type="showPassword ? 'text' : 'password'"
+                    [type]="showPassword ? 'text' : 'password'"
                     id="password"
                     name="password"
                     [(ngModel)]="password"
@@ -85,7 +85,7 @@
                     (input)="checkPasswordStrength()"
                     />
                     <span class="input-group-text" (click)="toggleShowPassword()">
-                        <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                        <i [ngClass]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                     </span>
                 </div>
                 
@@ -94,9 +94,9 @@
                     <div class="progress">
                         <div
                         class="progress-bar"
-                        :class="passwordStrengthClass"
+                        [ngClass]="passwordStrengthClass"
                         role="progressbar"
-                        :style="{ width: passwordStrength + '%' }"
+                        [ngStyle]="{ width: passwordStrength + '%' }"
                         :aria-valuenow="passwordStrength"
                         aria-valuemin="0"
                         aria-valuemax="100"
@@ -116,7 +116,7 @@
         <div class="col-md-8">
             <div class="input-group">
                 <input
-                :type="showPassword2 ? 'text' : 'password'"
+                [type]="showPassword2 ? 'text' : 'password'"
                 id="password2"
                 name="password2"
                 [(ngModel)]="password2"
@@ -124,7 +124,7 @@
                 class="form-control"
                 />
                 <span class="input-group-text" (click)="toggleShowPassword2()">
-                    <i :class="showPassword2 ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    <i [ngClass]="showPassword2 ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                 </span>
             </div>
         </div>
