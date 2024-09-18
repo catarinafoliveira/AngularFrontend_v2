@@ -1,0 +1,203 @@
+<!-- Show Info -->
+<div>
+    <table class="w-auto table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Id Card</th>
+                <th scope="col">Licence</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (driver of drivers; track driver.name) {
+                <tr>
+                    <td>
+                        @if(driver.status=='inactive'){
+                            <img src="/inactive.png"/>
+                        }
+                    </td>
+                    <td>{{ driver.name }}</td>
+                    <td>{{ driver.idCard }}</td>
+                    <td>{{ driver.licence }}</td>
+                    <td>
+                        <img src="/edit.png" (click)="toggleEdit(driver)">
+                        <img src="/delete.png" (click)="openDeleteModal(driver)">
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <img style="margin-left: 20px;" src="/add.png" (click)="toggleAdd()">
+</div>
+
+<!-- Forms -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Add form -->
+            @if(showAddForm){
+                <form (ngSubmit) = "openAddModal()" >
+                    <h5>Add Driver:</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nameField" class="form-label">Name:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nameField" name="nameField" [(ngModel)]="newDriver.name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="idField" class="form-label">Id Card:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="idField" name="idField" [(ngModel)]="newDriver.idCard">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="licenceField" class="form-label">Licence:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="licenceField" name="licenceField" [(ngModel)]="newDriver.licence">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger me-2" (click)="cancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success">Confirm</button>
+                        </div>
+                    </div>
+                </form>
+            }
+            <!-- Edit form -->
+            @if(showEditForm){
+                <form (ngSubmit) = "openEditModal()" >
+                    <h5>Edit Driver:</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nameField" class="form-label">Name:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nameField" name="nameField" [(ngModel)]="selectedDriver.name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="idField" class="form-label">Id Card:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="idField" name="idField" [(ngModel)]="selectedDriver.idCard">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="licenceField" class="form-label">Licence:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="licenceField" name="licenceField" [(ngModel)]="selectedDriver.licence">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger me-2" (click)="cancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success">Confirm</button>
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div>
+    <!-- Add Confirmation modal -->
+    <div class="modal fade" id="addDriverModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirm Submission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You are about to create a new driver with the folowing data:
+                    <strong>Name:</strong> {{ newDriver.name }}<br>
+                    <strong>ID Card:</strong> {{ newDriver.idCard }}<br>
+
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="confirmAdd()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit confirmation modal -->
+    <div class="modal fade" id="editDriverModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmEditModalLabel">Confirm Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                @if(backupDriver.name!=selectedDriver.name || backupDriver.idCard!=selectedDriver.idCard || backupDriver.licence!=selectedDriver.licence){
+                    <div class="modal-body">
+                        You are about to edit the driver with the folowing data:<br>
+                        <strong>Name:</strong> {{backupDriver.name}} 
+                        @if(backupDriver.name!=selectedDriver.name){
+                            <span>&rarr; {{ selectedDriver.name }}</span>
+                        }<br>
+                        <strong>ID Card:</strong> {{backupDriver.idCard}} 
+                        @if(backupDriver.idCard!=selectedDriver.idCard){
+                            <span>&rarr; {{ selectedDriver.idCard }}</span><br><br>
+                        }<br>
+                        <strong>Licence:</strong> {{backupDriver.licence}} 
+                        @if(backupDriver.licence!=selectedDriver.licence){
+                            <span>&rarr; {{ selectedDriver.licence }}</span><br><br>
+                        }
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" (click)="confirmEdit()">Confirm</button>
+                    </div>
+                } @else {
+                    <div class="modal-body">
+                        No changes were made.
+                    </div>
+                    <div v-else class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete confirmaion modal -->
+    <div class="modal fade" id="deleteDriverModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You are about to delete the driver:<br>
+                    <strong>Name:</strong> {{ selectedDriver.name }}<br>
+                    <strong>ID Card:</strong> {{ selectedDriver.idCard }}<br>
+                    <p>Are you sure? Please enter the ID card to confirm:</p>
+                    <input type="text" [(ngModel)]="confirmationIdCard" class="form-control" placeholder="Enter ID Card">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="confirmDeleteModal()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

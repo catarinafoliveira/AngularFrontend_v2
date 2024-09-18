@@ -1,0 +1,211 @@
+<!-- Show Info -->
+<div>
+    <table class="w-auto table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Id Card</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (person of persons; track person.name) {
+                <tr>
+                    <td>
+                        @if(person.status=='inactive'){
+                            <img src="/inactive.png"/>
+                        }
+                    </td>
+                    <td>
+                        @if(person.__t=='Driver'){
+                            <img src="/steering.png"/>
+                        }
+                    </td>
+                    <td>{{ person.name }}</td>
+                    <td>{{ person.idCard }}</td>
+                    <td>
+                        <img src="/edit.png" (click)="toggleEdit(person)">
+                        <img src="/delete.png" (click)="openDeleteModal(person)">
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <img style="margin-left: 20px;" src="/add.png" (click)="toggleAdd()">
+</div>
+
+<!-- Forms -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Add form -->
+            @if(showAddForm){
+                <form (ngSubmit) = "openAddModal()" >
+                    <h5>Add Person:</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nameField" class="form-label">Name:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nameField" name="nameField" [(ngModel)]="newPerson.name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="idField" class="form-label">Id Card:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="idField" name="idField" [(ngModel)]="newPerson.idCard">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="flexSwitchCheckDefault">Driver:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="switchDriver" role="switch" [(ngModel)]="isDriver">
+                            </div>
+                        </div>
+                    </div>
+                    @if(isDriver){
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="licenceField" class="form-label">Licence:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="licenceField" name="licenceField" [(ngModel)]="newPerson.licence">
+                            </div>
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger me-2" (click)="cancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success">Confirm</button>
+                        </div>
+                    </div>
+                </form>
+            }
+            <!-- Edit form -->
+            @if(showEditForm){
+                <form (ngSubmit) = "openEditModal()" >
+                    <h5>Edit Person:</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="nameField" class="form-label">Name:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="nameField" name="nameField" [(ngModel)]="selectedPerson.name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="idField" class="form-label">Id Card:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="idField" name="idField" [(ngModel)]="selectedPerson.idCard">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger me-2" (click)="cancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success">Confirm</button>
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div>
+    <!-- Add Confirmation modal -->
+    <div class="modal fade" id="addPersonModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirm Submission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You are about to create a new person with the folowing data:
+                    <strong>Name:</strong> {{ newPerson.name }}<br>
+                    <strong>ID Card:</strong> {{ newPerson.idCard }}<br>
+                    @if(isDriver){
+                        <div>
+                            <strong>Driver's Licence:</strong> {{ newPerson.licence }}<br>
+                        </div><br>
+                    }
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="confirmAdd()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit confirmation modal -->
+    <div class="modal fade" id="editPersonModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmEditModalLabel">Confirm Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                @if(backupPerson.name!=selectedPerson.name || backupPerson.idCard!=selectedPerson.idCard){
+                    <div class="modal-body">
+                        You are about to edit the person with the folowing data:<br>
+                        <strong>Name:</strong> {{backupPerson.name}} 
+                        @if(backupPerson.name!=selectedPerson.name){
+                            <span>&rarr; {{ selectedPerson.name }}</span>
+                        }<br>
+                        <strong>ID Card:</strong> {{backupPerson.idCard}} 
+                        @if(backupPerson.idCard!=selectedPerson.idCard){
+                            <span>&rarr; {{ selectedPerson.idCard }}</span><br><br>
+                        }
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" (click)="confirmEdit()">Confirm</button>
+                    </div>
+                } @else {
+                    <div class="modal-body">
+                        No changes were made.
+                    </div>
+                    <div v-else class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete confirmaion modal -->
+    <div class="modal fade" id="deletePersonModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You are about to delete the person:<br>
+                    <strong>Name:</strong> {{ selectedPerson.name }}<br>
+                    <strong>ID Card:</strong> {{ selectedPerson.idCard }}<br>
+                    <p>Are you sure? Please enter the ID card to confirm:</p>
+                    <input type="text" [(ngModel)]="confirmationIdCard" class="form-control" placeholder="Enter ID Card">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="confirmDeleteModal()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
