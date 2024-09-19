@@ -31,28 +31,33 @@ export class AppComponent {
     return user ? JSON.parse(user) : null;
   }
   
-  getUserRole(): string | null {
-    const user = localStorage.getItem('decodedUser');
-    return user ? JSON.parse(user).userRole : null;
-  }  
   
-  getUserId(): string {
-    const user = localStorage.getItem('decodedUser');
-    return user ? JSON.parse(user).id : null;
+  logout(): void {
+    localStorage.clear();
+    window.location.reload();
   }
+  // getUserRole(): string | null {
+  //   const user = localStorage.getItem('decodedUser');
+  //   return user ? JSON.parse(user).userRole : null;
+  // }  
   
-  getUserName(): string {
-    const user = localStorage.getItem('decodedUser');
-    return user ? JSON.parse(user).username : null;
-  }
+  // getUserId(): string {
+  //   const user = localStorage.getItem('decodedUser');
+  //   return user ? JSON.parse(user).id : null;
+  // }
   
-  getUserIdCard(): string {
-    const user = localStorage.getItem('decodedUser');
-    return user ? JSON.parse(user).idCard : null;
-  }
+  // getUserName(): string {
+  //   const user = localStorage.getItem('decodedUser');
+  //   return user ? JSON.parse(user).username : null;
+  // }
   
-  getUserLicence(): string {
-    const user = localStorage.getItem('decodedUser');
-    return user ? JSON.parse(user).licence : null;
-  }
+  // getUserIdCard(): string {
+  //   const user = localStorage.getItem('decodedUser');
+  //   return user ? JSON.parse(user).idCard : null;
+  // }
+  
+  // getUserLicence(): string {
+  //   const user = localStorage.getItem('decodedUser');
+  //   return user ? JSON.parse(user).licence : null;
+  // }
 }
