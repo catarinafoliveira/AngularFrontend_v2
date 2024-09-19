@@ -12,24 +12,42 @@
         <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
     </ul>
 } @else {
-    <ul class="nav nav-tabs">
-        <!-- Left-aligned tabs -->
-        <li class="nav-item"><a class="nav-link" routerLink="/"><img style="margin-left: 10px;" src="/home.png">Home</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/persons"><img style="margin-left: 10px;" src="/user.png">Persons</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/drivers"><img style="margin-left: 10px;" src="/driver.png">Drivers</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/cars"><img style="margin-left: 10px;" src="/car.png">Cars</a></li>
-        
-        <!-- Spacer to push next items to the right -->
-        <li class="ms-auto"></li>
-        
-        <!-- Logout button, to the right-->
-        <button class="btn btn-danger" (click)="logout()">Logout</button>
-    </ul>
+    @if(getUserRole()=="employee"){
+        <ul class="nav nav-tabs">
+            <!-- Left-aligned tabs -->
+            <li class="nav-item"><a class="nav-link" routerLink="/"><img style="margin-left: 10px;" src="/home.png">Home</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/persons"><img style="margin-left: 10px;" src="/user.png">Persons</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/drivers"><img style="margin-left: 10px;" src="/driver.png">Drivers</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/cars"><img style="margin-left: 10px;" src="/car.png">Cars</a></li>
+            
+            <!-- Spacer to push next items to the right -->
+            <li class="ms-auto"></li>
+            
+            <!-- Logout button, to the right-->
+            <button class="btn btn-danger" (click)="logout()">Logout</button>
+        </ul>
+    } @else {
+        <ul class="nav nav-tabs">
+            <!-- Left-aligned tabs -->
+            <li class="nav-item"><a class="nav-link" routerLink="/"><img style="margin-left: 10px;" src="/home.png">Home</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/myPersonal"><img style="margin-left: 10px;" src="/user.png">My personal data</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/myDriver"><img style="margin-left: 10px;" src="/driver.png">My driver data</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/myCars"><img style="margin-left: 10px;" src="/car.png">My cars</a></li>
+            
+            <!-- Spacer to push next items to the right -->
+            <li class="ms-auto"></li>
+            
+            <!-- Logout button, to the right-->
+            <button class="btn btn-danger" (click)="logout()">Logout</button>
+        </ul>
+    }
+    
 }
 
 
 <!-- Content -->
 <div class="container">
+    {{getUserRole()}}
     <router-outlet></router-outlet>
 </div>
 

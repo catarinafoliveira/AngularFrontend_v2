@@ -36,10 +36,10 @@ export class AppComponent {
     localStorage.clear();
     window.location.reload();
   }
-  // getUserRole(): string | null {
-  //   const user = localStorage.getItem('decodedUser');
-  //   return user ? JSON.parse(user).userRole : null;
-  // }  
+  getUserRole(): string | null {
+    const user = localStorage.getItem('decodedUser');
+    return user ? JSON.parse(user).userRole : null;
+  }  
   
   // getUserId(): string {
   //   const user = localStorage.getItem('decodedUser');
