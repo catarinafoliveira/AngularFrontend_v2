@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { MessageService } from './thisServices/message.service';
 import { AuthenticatorService } from './thisServices/authenticator.service';
-import { Person } from './thisModels/person';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +34,7 @@ export class AppComponent {
   }
 
   logout(): void {
-    localStorage.clear();
+    this.authenticatorService.logout();
     window.location.reload();
   }
   

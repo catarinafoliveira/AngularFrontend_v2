@@ -1,0 +1,9 @@
+.my-person {
+    display: flex;
+}
+.card-header {
+    font-size: 1.1rem;
+}
+.text {
+    font-size: 1rem;
+}

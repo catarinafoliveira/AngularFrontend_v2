@@ -19,6 +19,10 @@ export class AuthenticatorService {
     const apiUrlLogin = "http://localhost:8080/api/auth/login" ;
     return this.http.post<User>(apiUrlLogin, user);
   }
+
+  logout(): void {
+    localStorage.clear();
+  }
   
   getUser(): string {
     const user = localStorage.getItem('decodedUser');

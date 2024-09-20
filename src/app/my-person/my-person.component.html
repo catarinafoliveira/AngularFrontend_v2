@@ -1,1 +1,168 @@
-<p>my-person works!</p>
+@if(getUserRole()=='driver'){
+    <div class="my-person">
+        <!-- Left menu for selecting API actions -->
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" (click)="getPerson('getById'); $event.preventDefault()">Get by ID</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" (click)="getPerson('getByName'); $event.preventDefault()">Get by Name</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" (click)="getPerson('getByIdCard'); $event.preventDefault()">Get by ID Card</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" (click)="updatePerson(); $event.preventDefault()">Update Person</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" (click)="deletePerson(); $event.preventDefault()">Delete Person</a>
+            </li>
+        </ul>
+        
+        <!-- Dynamic results -->
+        @if(selectedAction!=""){
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        {{ title }}
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <!-- View data -->
+                            @if(selectedAction === 'getById' || selectedAction === 'getByName' || selectedAction === 'getByIdCard'){
+                                <div class="text">
+                                    <table style="margin-left: 20px;" class="w-auto table table-hover">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col"></th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Id Card</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @if(person.status === 'inactive'){
+                                                        <img src="/inactive.png"/>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if(person.__t === 'Driver'){
+                                                        <img src="/steering.png"/>
+                                                    }
+                                                </td>
+                                                <td>{{ person.name }}</td>
+                                                <td>{{ person.idCard }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            
+                            <!-- Edit data -->
+                            @if(selectedAction === 'updatePerson'){
+                                <div class="text">
+                                    <form (ngSubmit)="showEditModal()">
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="nameField" class="form-label">Name:</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" id="nameField" name="nameField" [(ngModel)] = "editPerson.name">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="idField" class="form-label">Id Card:</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" id="idField" name="idField" [(ngModel)] = "editPerson.idCard">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 d-flex justify-content-end">
+                                                <button type="button" class="btn btn-danger me-2" (click)="cancelEdit()">Cancel</button>
+                                                <button type="submit" class="btn btn-success">Confirm</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            } 
+                            
+                            @if(selectedAction === 'deletePerson') {
+                                <div class="text">
+                                    <p>Deactivate your acount will log you out of the system and you will not be able to login again.</p> 
+                                    <p>Are you sure?</p>
+                                    <button class="btn btn-danger" (click)="showDeleteModal()">Deactivate & logout</button>
+                                </div>
+                            }
+                            
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    
+}
+<!-- Edit Confirmation Modal -->
+<div class="modal fade" id="editPersonModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmEditModalLabel">Confirm Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @if(person.name!=editPerson.name || person.idCard!=editPerson.idCard){
+                <div class="modal-body">
+                    You are about to edit the person with the folowing data:<br>
+                    <strong>Name:</strong> {{person.name}} 
+                    @if(person.name!=editPerson.name){
+                        <span>&rarr; {{ editPerson.name }}</span>
+                    }
+                    <br>
+                    <strong>ID Card:</strong> {{person.idCard}} 
+                    @if(person.idCard!=editPerson.idCard){
+                        <span>&rarr; {{ editPerson.idCard }}</span><br>
+                    }
+                    <br>
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="confirmEdit()">Confirm</button>
+                </div>
+            }@else {
+                <div class="modal-body">
+                    No changes were made.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal for deletion confirmation -->
+<div class="modal fade" id="deletePersonModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are about to deactivate your account and logout.</p>
+                <p>Are you sure? Please enter your ID card to confirm:</p>
+                <input type="text" name="confirmationId" [(ngModel)]="confirmationIdCard" class="form-control" placeholder="Enter ID Card">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDeleteModal()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
