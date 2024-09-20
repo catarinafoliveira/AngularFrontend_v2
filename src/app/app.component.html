@@ -1,5 +1,5 @@
 <!-- Guest User -->
-@if(getUser()==null){
+@if(getUserRole()==null){
     <ul class="nav nav-tabs">
         <!-- Left-aligned tabs -->
         <li class="nav-item"><a class="nav-link" routerLink="/"><img style="margin-left: 10px;" src="/home.png">Home</a></li>
@@ -40,14 +40,12 @@
             <!-- Logout button, to the right-->
             <button class="btn btn-danger" (click)="logout()">Logout</button>
         </ul>
-    }
-    
+    }   
 }
 
 
 <!-- Content -->
 <div class="container">
-    {{getUserRole()}}
     <router-outlet></router-outlet>
 </div>
 

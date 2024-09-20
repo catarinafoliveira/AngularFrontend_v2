@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Car } from '../thisModels/car';
+import { AuthenticatorService } from './authenticator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,23 +10,26 @@ import { Car } from '../thisModels/car';
 export class CarService {
   private apiUrl = "http://localhost:8080/api/cars" ;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authenticatorService: AuthenticatorService
+  ){}
 
   getCars(): Observable<Car[]>{
-    return this.http.get<Car[]>(this.apiUrl);
+    return this.http.get<Car[]>(this.apiUrl, { headers: this.authenticatorService.getHeaders() });
   }
 
   createCar(car: Car): Observable<Car> {
-    return this.http.post<Car>(this.apiUrl, car);
+    return this.http.post<Car>(this.apiUrl, car, { headers: this.authenticatorService.getHeaders() });
   }
 
   updateCar(car: Car): Observable<Car> {
     const localURL = this.apiUrl+"/"+car._id;
-    return this.http.put<Car>(localURL, car);
+    return this.http.put<Car>(localURL, car, { headers: this.authenticatorService.getHeaders() });
   }
 
   deleteCar(car: Car): Observable<Car> {
     const localURL = this.apiUrl+"/"+car._id;
-    return this.http.delete<Car>(localURL);
+    return this.http.delete<Car>(localURL, { headers: this.authenticatorService.getHeaders() });
   }
 }

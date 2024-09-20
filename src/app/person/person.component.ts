@@ -173,7 +173,7 @@ export class PersonComponent implements OnInit{
     this.personService.deletePerson(person).subscribe({
       next: () => {
         this.messageService.sendMessage({
-          text: 'Person deleted successfully.',
+          text: 'Person marked inactive.',
           type: 'alert alert-success'
         });
         this.getPersons();
