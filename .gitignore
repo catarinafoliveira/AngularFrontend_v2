@@ -1,5 +1,4 @@
 .editorconfig
-angular.json
 .angular/
 .vscode/
 node_modules/
